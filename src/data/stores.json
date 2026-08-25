@@ -1,0 +1,41 @@
+[
+  {
+    "id": "jaipur-mill",
+    "name": "Bharatiya Chakki Mill & Pickup",
+    "type": "mill",
+    "address": "Plot 42, Sitapura Industrial Area",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "pincode": "302022",
+    "phone": "+91 141 456 2100",
+    "hours": "Mon–Sat, 9:00–18:00",
+    "lat": 26.787,
+    "lng": 75.837
+  },
+  {
+    "id": "delhi-store",
+    "name": "Khan Market Counter",
+    "type": "store",
+    "address": "13-A, Middle Lane, Khan Market",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "pincode": "110003",
+    "phone": "+91 11 4175 2100",
+    "hours": "Mon–Sun, 11:00–20:00",
+    "lat": 28.600,
+    "lng": 77.227
+  },
+  {
+    "id": "mumbai-pickup",
+    "name": "Bandra Pickup Point",
+    "type": "pickup",
+    "address": "17, Linking Road, Khar West",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "pincode": "400052",
+    "phone": "+91 22 2648 2100",
+    "hours": "Tue–Sun, 10:00–19:00",
+    "lat": 19.07,
+    "lng": 72.837
+  }
+]

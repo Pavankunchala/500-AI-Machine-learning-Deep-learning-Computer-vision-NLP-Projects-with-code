@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+:root {
+  --cream: #fbf7f0;
+  --paper: #fffdf8;
+  --sand: #f1e2cc;
+  --wheat: #c6a15b;
+  --gold: #b07d2a;
+  --terracotta: #c45c3a;
+  --clay: #9c4221;
+  --brown: #3d2415;
+  --ink: #2a1810;
+  --muted: #6f5648;
+}
+
+@theme inline {
+  --color-cream: var(--cream);
+  --color-paper: var(--paper);
+  --color-sand: var(--sand);
+  --color-wheat: var(--wheat);
+  --color-gold: var(--gold);
+  --color-terracotta: var(--terracotta);
+  --color-clay: var(--clay);
+  --color-brown: var(--brown);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-outfit);
+  --font-serif: var(--font-cormorant);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-outfit), system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3,
+.font-serif {
+  font-family: var(--font-cormorant), Georgia, serif;
+}
+
+::selection {
+  background: #e8c989;
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--terracotta);
+  outline-offset: 3px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s ease both;
+}
