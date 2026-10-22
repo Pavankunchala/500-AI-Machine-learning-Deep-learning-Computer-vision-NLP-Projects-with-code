@@ -18,19 +18,38 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | null>(null);
 const KEY = "bc-cart-v1";
+const EMPTY_CART: CartItem[] = [];
 const listeners = new Set<() => void>();
+
+// React 19 requires getSnapshot to return the same reference until the store changes.
+let cachedRaw: string | null | undefined;
+let cachedCart: CartItem[] = EMPTY_CART;
 
 function emit() {
   listeners.forEach((l) => l());
 }
 
 function readCart(): CartItem[] {
+  if (typeof window === "undefined") return EMPTY_CART;
+  let raw: string | null;
   try {
-    const raw = localStorage.getItem(KEY);
-    return raw ? (JSON.parse(raw) as CartItem[]) : [];
+    raw = localStorage.getItem(KEY);
   } catch {
-    return [];
+    raw = null;
   }
+  if (raw === cachedRaw) return cachedCart;
+  cachedRaw = raw;
+  if (!raw) {
+    cachedCart = EMPTY_CART;
+    return cachedCart;
+  }
+  try {
+    const parsed = JSON.parse(raw) as CartItem[];
+    cachedCart = Array.isArray(parsed) ? parsed : EMPTY_CART;
+  } catch {
+    cachedCart = EMPTY_CART;
+  }
+  return cachedCart;
 }
 
 function writeCart(items: CartItem[]) {
@@ -45,7 +64,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return () => listeners.delete(onStoreChange);
     },
     readCart,
-    () => [] as CartItem[],
+    () => EMPTY_CART,
   );
 
   const add = useCallback((item: Omit<CartItem, "qty">, qty = 1) => {
