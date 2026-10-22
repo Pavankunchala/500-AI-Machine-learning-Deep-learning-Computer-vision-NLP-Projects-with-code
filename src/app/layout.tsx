@@ -1,70 +1,41 @@
-import type { Metadata } from "next";
-import { Cormorant_Garamond, Outfit } from "next/font/google";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { Providers } from "@/components/layout/Providers";
-import { JsonLd } from "@/components/JsonLd";
-import { organizationJsonLd } from "@/lib/seo";
-import { SITE } from "@/lib/site";
+import type { Metadata, Viewport } from "next";
+import { Noto_Sans, Noto_Sans_Kannada, Outfit, Syne } from "next/font/google";
+import { Providers } from "@/components/session";
 import "./globals.css";
 
-const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit", display: "swap" });
+const syne = Syne({ subsets: ["latin"], variable: "--font-syne", display: "swap" });
+const noto = Noto_Sans({
+  subsets: ["latin", "devanagari"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-noto",
+  display: "swap",
+});
+const kannada = Noto_Sans_Kannada({
+  subsets: ["kannada"],
+  weight: ["400", "600", "700"],
+  variable: "--font-kannada",
   display: "swap",
 });
 
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  display: "swap",
-});
-
-export const viewport = {
-  themeColor: "#3D2415",
+export const viewport: Viewport = {
+  themeColor: "#070910",
   width: "device-width",
   initialScale: 1,
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE.url),
-  title: {
-    default: `${SITE.name} — ${SITE.tagline}`,
-    template: `%s · ${SITE.name}`,
-  },
-  description: SITE.description,
-  openGraph: {
-    title: SITE.name,
-    description: SITE.description,
-    url: SITE.url,
-    siteName: SITE.name,
-    images: [{ url: "/images/hero-chakki.webp", width: 1600, height: 900, alt: "Stone chakki mill grinding wheat" }],
-    locale: "en_IN",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: SITE.name,
-    description: SITE.description,
-    images: ["/images/hero-chakki.webp"],
-  },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  title: { default: "TrendPulse — see the trend, leave with a hook", template: "%s · TrendPulse" },
+  description: "TrendPulse turns a cached X snapshot into angles, hooks, and scripts for your niche. Opening the list does not call X.",
   robots: { index: true, follow: true },
-  alternates: { canonical: "/" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-IN" className={`${outfit.variable} ${cormorant.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col bg-cream font-sans text-ink">
-        <JsonLd data={organizationJsonLd()} />
-        <Providers>
-          <Header />
-          <main id="main" className="flex-1">
-            {children}
-          </main>
-          <Footer />
-        </Providers>
+    <html lang="en" className={`${outfit.variable} ${syne.variable} ${noto.variable} ${kannada.variable} h-full antialiased`}>
+      <body className="min-h-full">
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

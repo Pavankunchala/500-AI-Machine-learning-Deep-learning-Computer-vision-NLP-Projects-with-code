@@ -1,45 +1,47 @@
-export function inr(value: number) {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(value);
+export function formatCompact(n: number): string {
+  return new Intl.NumberFormat("en-IN", { notation: "compact", maximumFractionDigits: 1 }).format(n);
 }
 
-export function formatDate(iso: string) {
+export function formatNumber(n: number): string {
+  return new Intl.NumberFormat("en-IN").format(n);
+}
+
+export function formatWhen(iso: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return iso;
   return new Intl.DateTimeFormat("en-IN", {
-    day: "numeric",
-    month: "short",
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "Asia/Kolkata",
+  }).format(date);
+}
+
+export function istDay(date = new Date()): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Kolkata",
     year: "numeric",
-  }).format(new Date(iso));
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
 }
 
-export function lastGrindingDate(now = new Date()) {
-  const d = new Date(now);
-  const day = d.getDay();
-  const diff = (day + 6) % 7;
-  d.setDate(d.getDate() - diff);
-  d.setHours(6, 30, 0, 0);
-  return d;
+export function previousDay(ymd: string): string {
+  const [y, m, d] = ymd.split("-").map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  dt.setUTCDate(dt.getUTCDate() - 1);
+  return dt.toISOString().slice(0, 10);
 }
 
-export function freshnessLabel(now = new Date()) {
-  const ground = lastGrindingDate(now);
-  const days = Math.floor((now.getTime() - ground.getTime()) / 86400000);
-  if (days <= 1) return "Ground yesterday — at its most fragrant.";
-  if (days <= 4) return `Stone-ground ${days} days ago — still sweet.`;
-  return "Ground this week — best within 45 days.";
+export function weekStartIso(date = new Date()): string {
+  const ymd = istDay(date);
+  const [y, m, d] = ymd.split("-").map(Number);
+  const utc = new Date(Date.UTC(y, m - 1, d));
+  const day = utc.getUTCDay();
+  const diff = day === 0 ? 6 : day - 1;
+  utc.setUTCDate(utc.getUTCDate() - diff);
+  return utc.toISOString().slice(0, 10);
 }
 
-export function daysUntilBest(now = new Date()) {
-  const packed = lastGrindingDate(now);
-  const best = new Date(packed);
-  best.setDate(best.getDate() + 45);
-  return Math.max(0, Math.ceil((best.getTime() - now.getTime()) / 86400000));
-}
-
-export function newOrderId() {
-  const n = Math.floor(1000 + Math.random() * 9000);
-  const y = new Date().getFullYear();
-  return `BC-${y}-${n}`;
+export function weekStartUtc(date = new Date()): string {
+  return new Date(`${weekStartIso(date)}T00:00:00+05:30`).toISOString();
 }
